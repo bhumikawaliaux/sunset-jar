@@ -38,7 +38,10 @@ export function HomeScreen() {
     >
       <div className="flex-1 overflow-y-auto pb-20">
         <header className="flex items-center px-5 pt-safe pt-5 pb-1">
-          <h1 className="text-[22px] font-bold text-amber leading-none tracking-tight">
+          <h1
+            className="text-[22px] font-bold leading-none tracking-tight"
+            style={{ color: '#F35B04' }}
+          >
             Sunset Jar
           </h1>
         </header>
