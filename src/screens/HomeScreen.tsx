@@ -37,12 +37,12 @@ export function HomeScreen() {
       className="flex-1 flex flex-col min-h-0 relative"
     >
       <div className="flex-1 overflow-y-auto pb-20">
-        <header className="flex items-center px-5 pt-safe pt-5 pb-1">
+        <header className="flex items-center px-5 pt-safe pb-1" style={{ paddingTop: 'calc(env(safe-area-inset-top) + 35px)' }}>
           <h1
             className="text-[22px] font-bold leading-none tracking-tight"
             style={{ color: '#F35B04' }}
           >
-            Sunset Jar
+            Your Sunset Jars
           </h1>
         </header>
 

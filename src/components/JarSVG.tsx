@@ -93,6 +93,36 @@ export function JarSVG({
         />
       </svg>
 
+      {/* HTML photo overlay — rendered as a regular <img> for reliable cross-browser
+          rendering (iOS Safari can flake on large data: URLs inside SVG <image>). */}
+      {imageSrc && !hideContents && fillProgress > 0 && (
+        <div
+          style={{
+            position: 'absolute',
+            left: (BODY_RECT.x / 200) * dims.w,
+            top: (BODY_RECT.y / 280) * dims.h,
+            width: (BODY_RECT.width / 200) * dims.w,
+            height: (BODY_RECT.height / 280) * dims.h,
+            borderRadius: (BODY_RECT.rx / 200) * dims.w,
+            overflow: 'hidden',
+            pointerEvents: 'none',
+            zIndex: 1,
+          }}
+        >
+          <img
+            src={imageSrc}
+            alt=""
+            draggable={false}
+            style={{
+              width: '100%',
+              height: '100%',
+              objectFit: 'cover',
+              display: 'block',
+            }}
+          />
+        </div>
+      )}
+
       {/* The jar itself */}
       <svg
         viewBox="0 0 200 280"
@@ -168,23 +198,13 @@ export function JarSVG({
           <g clipPath={`url(#${clipId})`}>
             <g mask={`url(#${fillMaskId})`}>
               {imageSrc ? (
-                <>
-                  <rect
-                    x={BODY_RECT.x}
-                    y={BODY_RECT.y}
-                    width={BODY_RECT.width}
-                    height={BODY_RECT.height}
-                    fill={palette.skyTop}
-                  />
-                  <image
-                    href={imageSrc}
-                    x={BODY_RECT.x}
-                    y={BODY_RECT.y}
-                    width={BODY_RECT.width}
-                    height={BODY_RECT.height}
-                    preserveAspectRatio="xMidYMid slice"
-                  />
-                </>
+                <rect
+                  x={BODY_RECT.x}
+                  y={BODY_RECT.y}
+                  width={BODY_RECT.width}
+                  height={BODY_RECT.height}
+                  fill="transparent"
+                />
               ) : (
                 <>
                   <rect

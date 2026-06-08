@@ -33,7 +33,8 @@ export function CapturedScreen() {
           style={{
             position: 'relative',
             paddingTop: 130,
-            paddingRight: 60,   // headroom for the lid sweep to the right
+            paddingLeft: 30,    // symmetric headroom so the jar sits centred
+            paddingRight: 30,   // (lid sweep extends visibly via overflow:visible)
             paddingLeft: 0,
           }}
         >
