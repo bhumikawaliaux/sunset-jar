@@ -35,7 +35,6 @@ export function CapturedScreen() {
             paddingTop: 130,
             paddingLeft: 30,    // symmetric headroom so the jar sits centred
             paddingRight: 30,   // (lid sweep extends visibly via overflow:visible)
-            paddingLeft: 0,
           }}
         >
           <LiquifyJar
