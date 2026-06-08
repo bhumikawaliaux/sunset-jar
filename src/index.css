@@ -1,0 +1,48 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html, body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: #FFFFFF;
+  color: #2A1810;
+  font-family: 'Figtree', system-ui, sans-serif;
+  font-size: 15px;
+  letter-spacing: -0.01em;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+#root {
+  max-width: 390px;
+  margin: 0 auto;
+  height: 100svh;
+  position: relative;
+  overflow: hidden;
+  background: #FFFFFF;
+}
+
+.pt-safe {
+  padding-top: max(env(safe-area-inset-top), 12px);
+}
+.pb-safe {
+  padding-bottom: max(env(safe-area-inset-bottom), 12px);
+}
+
+input, textarea {
+  font-family: 'Figtree', system-ui, sans-serif;
+}
+
+/* Clean amber input underline */
+.amber-underline {
+  border-bottom: 1.5px solid rgba(46, 196, 182, 0.45);
+}
+.amber-underline:focus-within,
+.amber-underline:focus {
+  border-bottom-color: #2EC4B6;
+}
