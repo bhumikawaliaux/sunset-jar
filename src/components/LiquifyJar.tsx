@@ -12,13 +12,9 @@ type Phase =
   | 'done';
 
 // Jar geometry (px) — verbatim from the design package
-const bX = 20, bY = 48, bW = 200, bH = 242, bR = 26;
-const nX = 73, nY = 26, nW = 94, nH = 22;
+// Body sits directly under the lid; its rounded top corners form the shoulders.
+const bX = 20, bY = 26, bW = 200, bH = 264, bR = 26;
 const lX = 60, lY = 0, lW = 120, lH = 26;
-const lGapW = nX - bX;          // 53
-const rGapX = nX + nW;          // 167
-const rGapW = bX + bW - rGapX;  // 53
-const shoulderH = bY - nY + 8;  // 30
 
 interface LiquifyJarProps {
   /** When non-null, the sequence runs end-to-end on mount. */
@@ -43,7 +39,7 @@ export default function LiquifyJar({
   onComplete,
   onAdd,
   onReset,
-  background = '#FFFFFF',
+  background: _background = '#FFFFFF',
   autoStart = true,
   showCaption = true,
   showCTA = true,
@@ -254,36 +250,6 @@ export default function LiquifyJar({
             x:      { duration: lidUp ? 0.52 : 0.78, ease: lidUp ? [0.34, 1.56, 0.64, 1] : [0.22, 1, 0.36, 1] },
             y:      { duration: lidUp ? 0.52 : 0.78, ease: lidUp ? [0.34, 1.56, 0.64, 1] : [0.22, 1, 0.36, 1] },
             rotate: { duration: lidUp ? 0.52 : 0.78, ease: 'easeInOut' },
-          }}
-        />
-
-        {/* ── Neck ── */}
-        <div
-          style={{
-            position: 'absolute',
-            left: nX, top: nY, width: nW, height: nH,
-            zIndex: 10,
-            background: 'rgba(255,255,255,0.38)',
-            borderLeft:  '1.5px solid rgba(255,255,255,0.6)',
-            borderRight: '1.5px solid rgba(255,255,255,0.6)',
-          }}
-        />
-
-        {/* ── Shoulder covers (mask gap between neck and body) ── */}
-        <div
-          style={{
-            position: 'absolute',
-            left: bX, top: nY,
-            width: lGapW, height: shoulderH,
-            zIndex: 9, background,
-          }}
-        />
-        <div
-          style={{
-            position: 'absolute',
-            left: rGapX, top: nY,
-            width: rGapW, height: shoulderH,
-            zIndex: 9, background,
           }}
         />
 
