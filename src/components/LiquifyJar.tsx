@@ -23,7 +23,7 @@ const lX = 60, lY = 0, lW = 120, lH = 26;
 // Mason-jar silhouette: narrow neck (x=60-140) at top, smooth shoulder curve
 // flaring out to body width (x=0-200), straight sides, slightly rounded base.
 const JAR_CLIP_PATH =
-  'path("M 60 0 L 140 0 L 140 18 C 140 30, 180 38, 200 55 L 200 230 C 200 250, 190 264, 170 264 L 30 264 C 10 264, 0 250, 0 230 L 0 55 C 20 38, 60 30, 60 18 Z")';
+  'path("M 64 0 L 136 0 Q 140 0 142 6 C 144 28, 186 40, 200 68 L 200 208 C 200 244, 178 264, 138 264 L 62 264 C 22 264, 0 244, 0 208 L 0 68 C 14 40, 56 28, 58 6 Q 60 0 64 0 Z")';
 
 interface LiquifyJarProps {
   /** When non-null, the sequence runs end-to-end on mount. */
