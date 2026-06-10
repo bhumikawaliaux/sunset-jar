@@ -11,10 +11,12 @@ type Phase =
   | 'closing'
   | 'done';
 
-// Jar geometry (px) — verbatim from the design package
-// Body sits directly under the lid; its rounded top corners form the shoulders.
-const bX = 20, bY = 26, bW = 200, bH = 264, bR = 26;
+// Jar geometry (px)
+// Slim brown neck sits below the lid; body's rounded top corners flare out
+// from under the neck to form the shoulders.
+const bX = 20, bY = 38, bW = 200, bH = 252, bR = 26;
 const lX = 60, lY = 0, lW = 120, lH = 26;
+const nX = 80, nY = 26, nW = 80, nH = 16;
 
 interface LiquifyJarProps {
   /** When non-null, the sequence runs end-to-end on mount. */
@@ -250,6 +252,18 @@ export default function LiquifyJar({
             x:      { duration: lidUp ? 0.52 : 0.78, ease: lidUp ? [0.34, 1.56, 0.64, 1] : [0.22, 1, 0.36, 1] },
             y:      { duration: lidUp ? 0.52 : 0.78, ease: lidUp ? [0.34, 1.56, 0.64, 1] : [0.22, 1, 0.36, 1] },
             rotate: { duration: lidUp ? 0.52 : 0.78, ease: 'easeInOut' },
+          }}
+        />
+
+        {/* ── Slim neck (brown, sits between lid and body) ── */}
+        <div
+          style={{
+            position: 'absolute',
+            left: nX, top: nY, width: nW, height: nH,
+            zIndex: 20,
+            background: 'linear-gradient(118deg, #9C6316 0%, #4F2D07 100%)',
+            borderRadius: '0 0 4px 4px',
+            boxShadow: 'inset 0 1px 0 rgba(255,200,110,0.18), 0 2px 4px rgba(0,0,0,0.18)',
           }}
         />
 
