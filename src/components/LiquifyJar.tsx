@@ -14,10 +14,16 @@ type Phase =
 // Jar geometry (px)
 // Slim brown neck sits below the lid; body's rounded top corners flare out
 // from under the neck to form the shoulders.
-const bX = 20, bY = 26, bW = 200, bH = 264, bR = 26;
+// Body container's full silhouette is drawn with a CSS clip-path (mason-jar shape).
+// Geometry is in the body container's own px coordinates (200 × 264).
+const bX = 20, bY = 26, bW = 200, bH = 264;
+// Lid overhangs the neck on each side; matches reference photo's silver lid.
 const lX = 60, lY = 0, lW = 120, lH = 26;
-// Slim glass neck sits on top of the body's upper-middle, between the shoulders.
-const nX = 70, nY = 22, nW = 100, nH = 22;
+
+// Mason-jar silhouette: narrow neck (x=60-140) at top, smooth shoulder curve
+// flaring out to body width (x=0-200), straight sides, slightly rounded base.
+const JAR_CLIP_PATH =
+  'path("M 60 0 L 140 0 L 140 18 C 140 30, 180 38, 200 55 L 200 230 C 200 250, 190 264, 170 264 L 30 264 C 10 264, 0 250, 0 230 L 0 55 C 20 38, 60 30, 60 18 Z")';
 
 interface LiquifyJarProps {
   /** When non-null, the sequence runs end-to-end on mount. */
@@ -256,47 +262,21 @@ export default function LiquifyJar({
           }}
         />
 
-        {/* ── Slim glass neck — overlays the body's upper-middle so the photo
-            stays visible through it. Vertical glass cylinder effect. ── */}
-        <div
-          style={{
-            position: 'absolute',
-            left: nX, top: nY, width: nW, height: nH,
-            zIndex: 20,
-            background:
-              'linear-gradient(90deg, rgba(255,255,255,0.55) 0%, rgba(255,255,255,0.18) 30%, rgba(255,255,255,0.04) 55%, rgba(255,255,255,0.22) 100%)',
-            borderLeft: '1.5px solid rgba(255,255,255,0.78)',
-            borderRight: '1.5px solid rgba(255,255,255,0.78)',
-            boxShadow:
-              'inset 0 1px 0 rgba(255,255,255,0.6), inset 0 -1px 0 rgba(0,0,0,0.08)',
-          }}
-        >
-          {/* Specular highlight strip on the left edge */}
-          <div
-            style={{
-              position: 'absolute',
-              top: 2, left: 5,
-              width: 3, height: nH - 4,
-              borderRadius: 2,
-              background:
-                'linear-gradient(to bottom, rgba(255,255,255,0.85), rgba(255,255,255,0.25))',
-            }}
-          />
-        </div>
-
-        {/* ── Jar body ── */}
+        {/* ── Jar body silhouette (mason-jar shape via clip-path) ── */}
         <div
           style={{
             position: 'absolute',
             left: bX, top: bY, width: bW, height: bH,
             zIndex: 10,
+            clipPath: JAR_CLIP_PATH,
+            WebkitClipPath: JAR_CLIP_PATH,
           }}
         >
           {/* Image layer — clipped to body shape, reveals top→bottom */}
           <div
             style={{
               position: 'absolute', inset: 0,
-              borderRadius: bR, overflow: 'hidden',
+              overflow: 'hidden',
             }}
           >
             {imageUrl && (
@@ -311,28 +291,36 @@ export default function LiquifyJar({
                   height: '100%',
                   objectFit: 'cover',
                   clipPath: jarFilled
-                    ? `inset(0% 0% 0% 0% round ${bR}px)`
-                    : `inset(0% 0% 100% 0% round ${bR}px)`,
+                    ? 'inset(0% 0% 0% 0%)'
+                    : 'inset(0% 0% 100% 0%)',
                   transition: 'clip-path 1.1s cubic-bezier(0.16, 1, 0.3, 1)',
                   WebkitTransition:
                     '-webkit-clip-path 1.1s cubic-bezier(0.16, 1, 0.3, 1), clip-path 1.1s cubic-bezier(0.16, 1, 0.3, 1)',
                   WebkitClipPath: jarFilled
-                    ? `inset(0% 0% 0% 0% round ${bR}px)`
-                    : `inset(0% 0% 100% 0% round ${bR}px)`,
+                    ? 'inset(0% 0% 0% 0%)'
+                    : 'inset(0% 0% 100% 0%)',
                 }}
               />
             )}
           </div>
 
-          {/* Glass overlay */}
+          {/* Glass overlay — subtle wash so the photo stays readable */}
           <div
             style={{
               position: 'absolute', inset: 0,
-              borderRadius: bR,
               pointerEvents: 'none',
-              background: 'linear-gradient(145deg, rgba(255,255,255,0.56) 0%, rgba(255,255,255,0.04) 50%, rgba(255,255,255,0.2) 100%)',
+              background: 'linear-gradient(145deg, rgba(255,255,255,0.22) 0%, rgba(255,255,255,0.02) 45%, rgba(255,255,255,0.08) 100%)',
+            }}
+          />
+
+          {/* Outline (just inside the silhouette edge) */}
+          <div
+            style={{
+              position: 'absolute', inset: 0,
+              pointerEvents: 'none',
               border: '1.5px solid rgba(255,255,255,0.72)',
-              boxShadow: '0 20px 60px rgba(0,0,0,0.07), inset 3px 6px 14px rgba(255,255,255,0.44)',
+              clipPath: JAR_CLIP_PATH,
+              WebkitClipPath: JAR_CLIP_PATH,
             }}
           />
 
@@ -353,7 +341,6 @@ export default function LiquifyJar({
           <div
             style={{
               position: 'absolute', bottom: 0, left: 0, right: 0, height: 50,
-              borderRadius: `0 0 ${bR}px ${bR}px`,
               background: 'linear-gradient(to bottom, transparent, rgba(0,0,0,0.05))',
               pointerEvents: 'none',
             }}
