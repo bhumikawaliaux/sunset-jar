@@ -14,9 +14,10 @@ type Phase =
 // Jar geometry (px)
 // Slim brown neck sits below the lid; body's rounded top corners flare out
 // from under the neck to form the shoulders.
-const bX = 20, bY = 38, bW = 200, bH = 252, bR = 26;
+const bX = 20, bY = 26, bW = 200, bH = 264, bR = 26;
 const lX = 60, lY = 0, lW = 120, lH = 26;
-const nX = 80, nY = 26, nW = 80, nH = 16;
+// Slim glass neck sits on top of the body's upper-middle, between the shoulders.
+const nX = 70, nY = 22, nW = 100, nH = 22;
 
 interface LiquifyJarProps {
   /** When non-null, the sequence runs end-to-end on mount. */
@@ -255,17 +256,33 @@ export default function LiquifyJar({
           }}
         />
 
-        {/* ── Slim neck (brown, sits between lid and body) ── */}
+        {/* ── Slim glass neck — overlays the body's upper-middle so the photo
+            stays visible through it. Vertical glass cylinder effect. ── */}
         <div
           style={{
             position: 'absolute',
             left: nX, top: nY, width: nW, height: nH,
             zIndex: 20,
-            background: 'linear-gradient(118deg, #9C6316 0%, #4F2D07 100%)',
-            borderRadius: '0 0 4px 4px',
-            boxShadow: 'inset 0 1px 0 rgba(255,200,110,0.18), 0 2px 4px rgba(0,0,0,0.18)',
+            background:
+              'linear-gradient(90deg, rgba(255,255,255,0.55) 0%, rgba(255,255,255,0.18) 30%, rgba(255,255,255,0.04) 55%, rgba(255,255,255,0.22) 100%)',
+            borderLeft: '1.5px solid rgba(255,255,255,0.78)',
+            borderRight: '1.5px solid rgba(255,255,255,0.78)',
+            boxShadow:
+              'inset 0 1px 0 rgba(255,255,255,0.6), inset 0 -1px 0 rgba(0,0,0,0.08)',
           }}
-        />
+        >
+          {/* Specular highlight strip on the left edge */}
+          <div
+            style={{
+              position: 'absolute',
+              top: 2, left: 5,
+              width: 3, height: nH - 4,
+              borderRadius: 2,
+              background:
+                'linear-gradient(to bottom, rgba(255,255,255,0.85), rgba(255,255,255,0.25))',
+            }}
+          />
+        </div>
 
         {/* ── Jar body ── */}
         <div
