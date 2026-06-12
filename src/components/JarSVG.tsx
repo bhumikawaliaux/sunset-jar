@@ -34,6 +34,27 @@ const SIZE_MAP: Record<Size, { w: number; h: number }> = {
 export const BODY_RECT = { x: 22, y: 64, width: 156, height: 198, rx: 18 };
 export const LID_RECT = { x: 48, y: 22, width: 104, height: 42, rx: 6 };
 
+// Mason-jar silhouette in SVG viewBox units (200×280). Starts right below the
+// lid at y=64 and extends to y=280. Same shape as LiquifyJar, fit into the
+// remaining 200×216 area under the lid.
+const SILHOUETTE_PATH =
+  'M 64 64 L 136 64 Q 140 64 142 68.9 C 144 86.9, 186 96.7, 200 119.6 L 200 234 C 200 263.5, 178 280, 138 280 L 62 280 C 22 280, 0 263.5, 0 234 L 0 119.6 C 14 96.7, 56 86.9, 58 68.9 Q 60 64 64 64 Z';
+
+// Build the same path for the HTML photo overlay, scaled to its pixel box
+// (overlay is `dims.w × (216/280)*dims.h` pixels, so paths scale uniformly).
+function silhouetteCssClip(width: number, height: number): string {
+  const sx = width / 200;
+  const sy = height / 216;
+  const p = (x: number, y: number) =>
+    `${(x * sx).toFixed(2)} ${((y - 64) * sy).toFixed(2)}`;
+  return `path("M ${p(64,64)} L ${p(136,64)} Q ${p(140,64)} ${p(142,68.9)} ` +
+    `C ${p(144,86.9)}, ${p(186,96.7)}, ${p(200,119.6)} ` +
+    `L ${p(200,234)} C ${p(200,263.5)}, ${p(178,280)}, ${p(138,280)} ` +
+    `L ${p(62,280)} C ${p(22,280)}, ${p(0,263.5)}, ${p(0,234)} ` +
+    `L ${p(0,119.6)} C ${p(14,96.7)}, ${p(56,86.9)}, ${p(58,68.9)} ` +
+    `Q ${p(60,64)} ${p(64,64)} Z")`;
+}
+
 export function JarSVG({
   size = 'md',
   imageSrc,
@@ -93,35 +114,41 @@ export function JarSVG({
         />
       </svg>
 
-      {/* HTML photo overlay — rendered as a regular <img> for reliable cross-browser
-          rendering (iOS Safari can flake on large data: URLs inside SVG <image>). */}
-      {imageSrc && !hideContents && fillProgress > 0 && (
-        <div
-          style={{
-            position: 'absolute',
-            left: (BODY_RECT.x / 200) * dims.w,
-            top: (BODY_RECT.y / 280) * dims.h,
-            width: (BODY_RECT.width / 200) * dims.w,
-            height: (BODY_RECT.height / 280) * dims.h,
-            borderRadius: (BODY_RECT.rx / 200) * dims.w,
-            overflow: 'hidden',
-            pointerEvents: 'none',
-            zIndex: 1,
-          }}
-        >
-          <img
-            src={imageSrc}
-            alt=""
-            draggable={false}
+      {/* HTML photo overlay — rendered as a regular <img>, clipped to the
+          mason-jar silhouette so it matches the captured-screen jar. */}
+      {imageSrc && !hideContents && fillProgress > 0 && (() => {
+        const overlayW = dims.w;
+        const overlayH = (216 / 280) * dims.h;
+        const clip = silhouetteCssClip(overlayW, overlayH);
+        return (
+          <div
             style={{
-              width: '100%',
-              height: '100%',
-              objectFit: 'cover',
-              display: 'block',
+              position: 'absolute',
+              left: 0,
+              top: (64 / 280) * dims.h,
+              width: overlayW,
+              height: overlayH,
+              overflow: 'hidden',
+              pointerEvents: 'none',
+              zIndex: 1,
+              clipPath: clip,
+              WebkitClipPath: clip,
             }}
-          />
-        </div>
-      )}
+          >
+            <img
+              src={imageSrc}
+              alt=""
+              draggable={false}
+              style={{
+                width: '100%',
+                height: '100%',
+                objectFit: 'cover',
+                display: 'block',
+              }}
+            />
+          </div>
+        );
+      })()}
 
       {/* The jar itself */}
       <svg
@@ -133,13 +160,7 @@ export function JarSVG({
       >
         <defs>
           <clipPath id={clipId}>
-            <rect
-              x={BODY_RECT.x}
-              y={BODY_RECT.y}
-              width={BODY_RECT.width}
-              height={BODY_RECT.height}
-              rx={BODY_RECT.rx}
-            />
+            <path d={SILHOUETTE_PATH} />
           </clipPath>
 
           <mask id={fillMaskId}>
@@ -183,15 +204,8 @@ export function JarSVG({
           </linearGradient>
         </defs>
 
-        {/* Glass body wash — subtle off-white so an empty jar reads as "glass" on cream bg */}
-        <rect
-          x={BODY_RECT.x}
-          y={BODY_RECT.y}
-          width={BODY_RECT.width}
-          height={BODY_RECT.height}
-          rx={BODY_RECT.rx}
-          fill="rgba(255,255,255,0.55)"
-        />
+        {/* Glass body wash — uses the mason-jar silhouette */}
+        <path d={SILHOUETTE_PATH} fill="rgba(255,255,255,0.55)" />
 
         {/* Inside content, clipped to body, masked by fill */}
         {showInside && (
@@ -261,13 +275,9 @@ export function JarSVG({
           />
         </g>
 
-        {/* Body outline */}
-        <rect
-          x={BODY_RECT.x}
-          y={BODY_RECT.y}
-          width={BODY_RECT.width}
-          height={BODY_RECT.height}
-          rx={BODY_RECT.rx}
+        {/* Body outline — mason-jar silhouette */}
+        <path
+          d={SILHOUETTE_PATH}
           fill="none"
           stroke="rgba(61,40,23,0.45)"
           strokeWidth="1.6"
