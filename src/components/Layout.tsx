@@ -39,6 +39,20 @@ export function Layout({ children }: LayoutProps) {
           zIndex: 0,
         }}
       />
+      {/* Deep green glow — bottom right (smaller) */}
+      <div
+        className="absolute pointer-events-none"
+        style={{
+          bottom: '-60px',
+          right: '-60px',
+          width: '180px',
+          height: '180px',
+          background: 'rgba(39,98,33,0.4)',
+          borderRadius: '50%',
+          filter: 'blur(40px)',
+          zIndex: 0,
+        }}
+      />
       <div className="relative z-10 flex-1 min-h-0 flex flex-col">
         {children}
       </div>
