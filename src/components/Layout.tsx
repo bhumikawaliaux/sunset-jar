@@ -47,7 +47,7 @@ export function Layout({ children }: LayoutProps) {
           right: '-60px',
           width: '180px',
           height: '180px',
-          background: 'rgba(39,98,33,0.4)',
+          background: 'rgba(91,180,80,0.4)',
           borderRadius: '50%',
           filter: 'blur(40px)',
           zIndex: 0,
