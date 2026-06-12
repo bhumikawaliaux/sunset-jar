@@ -33,7 +33,7 @@ export function Layout({ children }: LayoutProps) {
           transform: 'translateY(-50%)',
           width: '260px',
           height: '260px',
-          background: 'rgba(203,243,240,0.2)',
+          background: 'rgba(203,243,240,0.4)',
           borderRadius: '50%',
           filter: 'blur(40px)',
           zIndex: 0,
